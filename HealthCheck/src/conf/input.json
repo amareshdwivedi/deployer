@@ -1,0 +1,137 @@
+{
+  "foundation": {
+    "restInput": {
+      "ipmi_netmask": "255.255.255.0",
+      "ipmi_gateway": "10.1.222.1",
+      "ipmi_user": "ADMIN",
+      "ipmi_password": "ADMIN",
+      "hypervisor_netmask": "255.255.255.0",
+      "hypervisor_gateway": "10.1.222.1",
+      "hypervisor_nameserver": "10.1.222.107",
+      "cvm_netmask": "255.255.255.0",
+      "cvm_gateway": "10.1.222.1",
+      "phoenix_iso": "phoenix-2.0.2_ESX_NOS-4.1.1.iso",
+      "hypervisor_iso": "VMware-VMvisor-Installer-5.5.0-1331820.x86_64.iso",
+      "use_foundation_ips": false,
+      "hypervisor": "esx",
+      "hyperv_sku": null,
+      "skip_hypervisor": false,
+      "blocks": [
+        {
+          "nodes": [
+            {
+              "ipmi_mac": "00:25:90:DA:FE:08",
+              "ipmi_ip": "10.1.222.23",
+              "hypervisor_ip": "10.1.222.83",
+              "cvm_ip": "10.1.222.63",
+              "hypervisor_hostname": "NTNX-Block-1-A",
+              "cvm_gb_ram": 24,
+              "ipv6_address": "",
+              "ipmi_configure_successful": true,
+              "ipmi_configure_now": true,
+              "ipv6_interface": "",
+              "node_position": "A",
+              "image_now": true,
+              "image_successful": false
+            },
+            {
+              "ipmi_mac": "00:25:90:DA:FE:00",
+              "ipmi_ip": "10.1.222.24",
+              "hypervisor_ip": "10.1.222.84",
+              "cvm_ip": "10.1.222.64",
+              "hypervisor_hostname": "NTNX-Block-1-B",
+              "cvm_gb_ram": 24,
+              "ipv6_address": "",
+              "ipmi_configure_successful": true,
+              "ipmi_configure_now": false,
+              "ipv6_interface": "",
+              "node_position": "B",
+              "image_now": true,
+              "image_successful": false
+            },
+            {
+              "ipmi_mac": "00:25:90:DA:FD:FD",
+              "ipmi_ip": "10.1.222.25",
+              "hypervisor_ip": "10.1.222.85",
+              "cvm_ip": "10.1.222.65",
+              "hypervisor_hostname": "NTNX-Block-1-C",
+              "cvm_gb_ram": 24,
+              "ipv6_address": "",
+              "ipmi_configure_successful": true,
+              "ipmi_configure_now": true,
+              "ipv6_interface": "",
+              "node_position": "C",
+              "image_now": true,
+              "image_successful": false
+            }
+          ],
+          "model": "undefined",
+          "ui_block_id": "Block-1",
+          "block_id": "null"
+        }
+      ],
+      "clusters": [
+        {
+          "cluster_external_ip": "10.1.222.51",
+          "cluster_init_successful": false,
+          "log_id": 3,
+          "cluster_name": "gso-cluster-2-IaaS",
+          "cvm_ntp_servers": "10.1.222.107",
+          "cvm_dns_servers": "10.1.222.107",
+          "cluster_init_now": true,
+          "hypervisor_ntp_servers": "10.1.222.107",
+          "cluster_members": [
+            "10.1.222.63",
+            "10.1.222.64",
+            "10.1.222.65"
+          ]
+        }
+      ],
+      "tests": {
+        "run_diagnostics": true,
+        "run_ncc": true
+      }
+    },
+    "server": "10.1.222.160"
+  },
+  "prismDetails": {
+    "restURL": "https://10.1.222.63:9440/PrismGateway/services/rest/",
+    "authentication": {
+      "username": "admin",
+      "password": "admin"
+    },
+    "container": {
+      "name": "Test_Container"
+    },
+    "storagepool": {
+      "name": "Test_StoragePool"
+    }
+  },
+  "vCenterConf": {
+    "host": "10.1.222.184",
+    "user": "root",
+    "password": "vmware",
+    "port": "443",
+    "datacenter": "Test_DataCenter",
+    "cluster": "Test_Cluster",
+    "datacenter_reuse_if_exist": "true",
+    "cluster_reuse_if_exist": "true",
+    "hosts": [
+      {
+        "ip": "10.1.222.83",
+        "user": "root",
+        "pwd": "nutanix/4u"
+      },
+      {
+        "ip": "10.1.222.84",
+        "user": "root",
+        "pwd": "nutanix/4u"
+      },
+      {
+        "ip": "10.1.222.85",
+        "user": "root",
+        "pwd": "nutanix/4u"
+      }
+    ]
+  }
+}

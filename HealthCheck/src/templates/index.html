@@ -1,0 +1,543 @@
+$def with (checkers,msg="")
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Health Check</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/static/styles/bootstrap.css">
+    <link rel="stylesheet" href="/static/styles/font-awesome.css">
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <!-- 
+    <script src="/static/js/health.js"></script>
+    -->
+    <script type="text/javascript" >
+		jQuery(document).ready(function(){
+			jQuery("#openPanel").hide();
+			jQuery("#closePanel").click(function() {
+				jQuery("#openPanel").show();
+				jQuery("#closePanel").hide();
+				jQuery("#leftPanel").hide();
+				jQuery("#mainContent").removeClass("col-lg-9 col-md-9 col-sm-9").addClass("col-lg-12 col-md-12 col-sm-12");
+				jQuery(".categorySec").css("margin-top","-35px");
+			});
+			
+			jQuery("#openPanel").click(function() {
+				jQuery("#openPanel").hide();
+				jQuery("#closePanel").show();
+				jQuery("#leftPanel").show();
+				jQuery("#mainContent").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-9 col-md-9 col-sm-9");
+				jQuery(".categorySec").css("margin-top","-8px");
+			});
+			
+			jQuery("#category_select").change(function() {
+				if(jQuery("#category_select").val() == ""){
+					jQuery("#runchecks").attr('disabled','disabled');
+					jQuery("#group_select").attr('disabled','disabled');
+					jQuery("#group_select").empty();
+					jQuery("#group_select").append("<option val=''>Select Check Group</option>");
+				}else{
+					jQuery("#runchecks").removeAttr('disabled');
+					jQuery("#group_select").removeAttr('disabled');
+				}
+				var category = $$("#category_select").val()
+
+				if(category == "vc"){
+				$$("#group_select").empty()
+				$$("#group_select").append('<option value="Run All">Run All</option>')	
+				$$("#group_select").append('<option value="cluster_checks">Cluster Checks</option>')
+				$$("#group_select").append('<option value="esxi_checks">ESXi Checks</option>')
+				$$("#group_select").append('<option value="cvm_checks">CVM Checks</option>')
+				$$("#group_select").append('<option value="vcenter_server_checks">vCenter Server Checks</option>')
+				$$("#group_select").append('<option value="storage_and_vm_checks">Storage and VM Checks</option>')
+				$$("#group_select").append('<option value="network_and_switch_checks">Network and Switch Checks</option>')
+				$$("#group_select").append('<option value="hardware_and_bios_checks">Hardware and BIOS Checks</option>')
+				$$("#group_select").append('<option value="availability">Availability</option>')
+				$$("#group_select").append('<option value="performance">Performance</option>')
+				$$("#group_select").append('<option value="security">Security</option>')
+				$$("#group_select").append('<option value="reliability">Reliability</option>')
+				$$("#group_select").append('<option value="recoverability">Recoverability</option>')
+				$$("#group_select").append('<option value="manageability">Manageability</option>')
+				$$("#group_select").append('<option value="configurability">Configurability</option>')
+				$$("#group_select").append('<option value="supportability">Supportability</option>')				
+				$$("#group_select").append('<option value="post-install">Post Install</option>')
+				}
+				if(category == "ncc"){
+					$$("#group_select").empty()
+					$$("#group_select").append('<option value="Run All">Run All</option>')
+					$$("#group_select").append('<option value="cassandra_checks">Cassandra Checks</option>')
+				    $$("#group_select").append('<option value="data_protection_checks">Data Protection Checks</option>')
+				    $$("#group_select").append('<option value="hardware_checks">Hardware Checks</option>')
+				    $$("#group_select").append('<option value="hypervisor_checks">Hypervisor Checks</option>')
+				    $$("#group_select").append('<option value="network_checks">Network Checks</option>')
+				    $$("#group_select").append('<option value="sar_checks">Sar Checks</option>')
+				    $$("#group_select").append('<option value="stargate_checks">Stargate Checks</option>')
+				    $$("#group_select").append('<option value="system_checks">System Checks</option>')
+				}
+				if(category == "view"){
+					$$("#group_select").empty()
+					$$("#group_select").append('<option value="Run All">Run All</option>')
+					$$("#group_select").append('<option value="availability">Availability</option>')
+					$$("#group_select").append('<option value="performance">Performance</option>')
+				}
+				
+			});
+			
+			jQuery("#stoprunchecks").click(function() {
+					console.log("stopping the execution");
+		            jQuery.ajax({
+		                url: '/stopExecute',
+		                type: "GET",
+		                //contentType: 'application/x-www-form-urlencoded',
+		                //dataType: "json",
+		                //data: form_data,
+		                success: function(data) {
+		                    console.log("Execution Stopped")
+
+		                var runButton = document.getElementById('runchecks');
+    					runButton.style.display = 'inline';
+    					runButton.style.visibility = 'visible';
+
+    					var stopButton = document.getElementById('stoprunchecks');
+    					stopButton.style.display = 'none';
+    					stopButton.style.visibility = 'hidden';
+		                },
+		            });
+		        });
+
+		    jQuery("#runchecks").click(function() {
+
+		    	var runButton = document.getElementById('runchecks');
+				runButton.style.display = 'none';
+				runButton.style.visibility = 'hidden';
+
+				var stopButton = document.getElementById('stoprunchecks');
+				stopButton.style.display = 'inline';
+				stopButton.style.visibility = 'visible';
+
+		    	function fetch_data(){
+		    		//cont_run = [];
+			        //cont_run.push({name: 'operation', value: 'refresh_logs'})
+
+                        jQuery.ajax({
+                            url: '/refresh',
+                            type: "GET",
+                            //data: cont_run,
+                            success: function(data) {
+                                var obj = jQuery.parseJSON(data);
+                                if(category == "ncc"){
+                                	jQuery("#logs").empty();
+                                	jQuery("#logs").append("<div id='nccDataHead' class='logsHeading col-lg-12 col-md-12 col-sm-12'>"+
+						        			"<div class='col-lg-10 col-md-10 col-sm-10'>Check</div>"+
+						        			
+						        			"<div class='col-lg-2 col-md-2 col-sm-2'>Status</div>"+
+						        		"</div>");
+		                        		jQuery("#logs").append("<div id='nccMainData' class='logsdata col-lg-12 col-md-12 col-sm-12'></div>");
+		                        		for(i=0; i<obj.ncc.checks.length; i++){
+                                		jQuery("#logs .logsdata").append("<div class='logsmainData'><div class='col-lg-10 col-md-10 col-sm-10'>"+obj.ncc.checks[i].Name+"</div>"+
+		                        		"<div class='col-lg-2 col-md-2 col-sm-2 result"+i+"'>"+obj.ncc.checks[i].Status+"</div></div>");
+		                        		
+		                        			if(jQuery(".result"+i+"").html()=="Pass"){
+					                        	jQuery(".result"+i+"").addClass("success");
+					                        }else if(jQuery(".result"+i+"").html()=="Fail"){
+					                        	jQuery(".result"+i+"").addClass("fail");
+					                        }else if(jQuery(".result"+i+"").html()=="Warn"){
+					                        	jQuery(".result"+i+"").addClass("warn");
+					                        }else if(jQuery(".result"+i+"").html()=="Err"){
+					                        	jQuery(".result"+i+"").addClass("err");
+					                        }
+				                        var h1 = jQuery('#logs')[0].scrollHeight,h2 = jQuery('#logs').height();
+				                        jQuery('#logs').scrollTop(h1 - h2);	
+		                        	}
+		                        }
+                                if(category == "view"){
+                                	jQuery("#logs").empty();
+		                        	jQuery("#nccDataHead").remove();
+		                        	jQuery("#nccMainData").remove();
+		                        	jQuery("#logs").empty();
+		                        	jQuery("#vcMainData").remove();
+		                        	jQuery("#vcDataHead").remove();		                        	
+		                        	for(i=0; i<obj.view.checks.length; i++){
+		                        		if(obj.view.checks[i].Status.toLowerCase() == "fail"){
+		                        			jQuery("#logs").append("<h4>"+obj.view.checks[i].Message+"<a href="+obj.view.checks[i].knowledge.content+"><i class='fa fa-question'></i></a>"+"</h4>");
+		                        		}
+		                        		else{
+		                        			jQuery("#logs").append("<h4>"+obj.view.checks[i].Message+"</h4>");
+		                        		}
+		                        		jQuery("#logs").append("<div class='logsHeading col-lg-12 col-md-12 col-sm-12'>"+
+						        			"<div class='col-lg-5 col-md-5 col-sm-5'>Actual</div>"+
+						        			"<div class='col-lg-5 col-md-5 col-sm-5'>Expected</div>"+
+						        			"<div class='col-lg-2 col-md-2 col-sm-2'>Status</div>"+
+						        		"</div>");
+		                        		jQuery("#logs").append("<div class='logsdata"+i+" col-lg-12 col-md-12 col-sm-12 logsdata'></div>");
+		                        		for(j=0; j<obj.view.checks[i].Properties.length; j++){
+			                        		jQuery("#logs .logsdata"+i).append("<div class='logsmainData'><div class='col-lg-5 col-md-5 col-sm-5'>"+obj.view.checks[i].Properties[j].Actual.replace(/;/g,'<BR/>')+"</div>"+
+			                        		"<div class='col-lg-5 col-md-5 col-sm-5'>"+obj.view.checks[i].Properties[j].Expected.replace(/;/g,'<br/>')+"</div>"+
+			                        		"<div class='col-lg-2 col-md-2 col-sm-2  result"+i+j+"'>"+obj.view.checks[i].Properties[j].Status+"</div></div>");
+			                        		
+			                        		if(jQuery(".result"+i+j+"").html()=="Pass"){
+					                        	jQuery(".result"+i+j+"").addClass("success");
+					                        }else if(jQuery(".result"+i+j+"").html()=="Fail"){
+					                        	jQuery(".result"+i+j+"").addClass("fail");
+					                        }
+		                        		}
+		                        	}
+			                        var h1 = jQuery('#logs')[0].scrollHeight,h2 = jQuery('#logs').height();
+			                        jQuery('#logs').scrollTop(h1 - h2);	
+		                        }
+                                if(category == "vc"){
+		                        	jQuery("#logs").empty();
+		                        	jQuery("#nccDataHead").remove();
+		                        	jQuery("#nccMainData").remove();
+		                        	jQuery("#logs").empty();
+		                        	jQuery("#viewMainData").remove();
+		                        	jQuery("#viewDataHead").remove();		                        	
+		                        	for(i=0; i<obj.vc.checks.length; i++){
+		                        		if(obj.vc.checks[i].Status == "FAIL"){
+		                        			jQuery("#logs").append("<h4>"+obj.vc.checks[i].Message+"<a href="+obj.vc.checks[i].knowledge.content+"><i class='fa fa-question'></i></a>"+"</h4>");
+		                        		}
+		                        		else{
+		                        			jQuery("#logs").append("<h4>"+obj.vc.checks[i].Message+"</h4>");
+		                        		}
+
+		                        		jQuery("#logs").append("<div class='logsHeading col-lg-12 col-md-12 col-sm-12'>"+
+						        			"<div class='col-lg-7 col-md-7 col-sm-7'>Check</div>"+
+						        			"<div class='col-lg-2 col-md-2 col-sm-2'>Expected</div>"+
+						        			"<div class='col-lg-2 col-md-2 col-sm-2'>Actual</div>"+
+						        			"<div class='col-lg-1 col-md-1 col-sm-1'>Status</div>"+
+						        		"</div>");
+		                        		jQuery("#logs").append("<div class='logsdata"+i+" col-lg-12 col-md-12 col-sm-12 logsdata'></div>");
+		                        		for(j=0; j<obj.vc.checks[i].Properties.length; j++){
+			                        		jQuery("#logs .logsdata"+i).append("<div class='logsmainData'><div class='col-lg-7 col-md-7 col-sm-7'>"+obj.vc.checks[i].Properties[j].Message+"</div>"+
+			                        		"<div class='col-lg-2 col-md-2 col-sm-2'>"+obj.vc.checks[i].Properties[j].Expected+"</div>"+
+			                        		"<div class='col-lg-2 col-md-2 col-sm-2'>"+obj.vc.checks[i].Properties[j].Actual+"</div>"+
+			                        		"<div class='col-lg-1 col-md-1 col-sm-1  result"+i+j+"'>"+obj.vc.checks[i].Properties[j].Status+"</div></div>");
+			                        		
+			                        		if(jQuery(".result"+i+j+"").html()=="PASS"){
+					                        	jQuery(".result"+i+j+"").addClass("success");
+					                        }else if(jQuery(".result"+i+j+"").html()=="FAIL"){
+					                        	jQuery(".result"+i+j+"").addClass("fail");
+					                        }
+		                        		}
+		                        	}
+			                        var h1 = jQuery('#logs')[0].scrollHeight,h2 = jQuery('#logs').height();
+			                        jQuery('#logs').scrollTop(h1 - h2);	
+		                        }
+                                //document.getElementById('logs').value = data;
+                             },
+                             beforeSend: function(){
+                                jQuery('.loader').css('display','inline-block');
+                                jQuery("#category_select").attr("disabled", "disabled");
+                                jQuery("#group_select").attr("disabled", "disabled");
+                                jQuery("#runchecks").attr("disabled", "disabled");
+                            }
+                         });
+                  }
+		    	
+		    	var inputElements = document.getElementsByClassName('run');
+		        checks = [] ;
+		        //checks.push({name: 'operation', value: 'exec_checks'}); 
+		        var category = $$("#category_select").val();
+		        var group = $$("#group_select").val();
+		       jQuery("#logs").empty();
+		        checks.push({name: "category", value:category });
+		        checks.push({name: "group" , value: group});
+		         
+		        console.log(checks)
+		        jQuery.ajax({
+		            url: '/run',
+		            type: "POST",
+		            data: checks,
+		            success: function(data) {
+		            	looping = false;
+		            	clearInterval(interval);
+
+		            	var runButton = document.getElementById('runchecks');
+    					runButton.style.display = 'inline';
+    					runButton.style.visibility = 'visible';
+
+    					var stopButton = document.getElementById('stoprunchecks');
+    					stopButton.style.display = 'none';
+    					stopButton.style.visibility = 'hidden';
+
+		            	fetch_data();
+		                //alert(data);
+		                jQuery("#modal_runchecks .runckeckStatus").html(data);
+		                jQuery("#modal_runchecks").modal('show');
+                        jQuery('.loader').css('display','none');
+                        jQuery("#category_select").removeAttr("disabled");
+                        jQuery("#group_select").removeAttr("disabled");
+                        jQuery("#runchecks").removeAttr("disabled");
+		            },
+		        });
+		        var interval = setInterval(function(){fetch_data()},3000);
+		        
+		        //Get call with refresh timer.
+		        //looping = true;
+		        
+		        
+		
+		
+		        //polling().done(function(){setTimeout(polling, 20000);});       
+		    return false;
+		    });
+		
+		    jQuery(".conf").click(function() {
+		        if ($$(this).attr('id')=="config_vc") {
+		            var form_data = $$("#vc").serializeArray();
+		            form_data.push({name: 'checker', value: 'vc'});
+		            console.log(form_data)
+		                jQuery.ajax({
+		                url: '/config',
+		                type: "POST",
+		                //contentType: 'application/json',		                
+		                dataType: "json",
+		                data: form_data,
+		                success: function(value) {
+		                    console.log(value)
+		                    //alert("Successfully Updated")
+		                    jQuery("#modal_config_vc").modal('show');
+		                },
+		            });
+		        }
+		        if ($$(this).attr('id')=="config_ncc") {
+		            
+		            var form_data = $$("#ncc").serializeArray();
+		            form_data.push({name: 'checker', value: 'ncc'});
+		            jQuery.ajax({
+		                url: '/config',
+		                type: "POST",
+		                //contentType: 'application/json',
+		                dataType: "json",
+		                data: form_data,
+		                success: function(data) {
+		                    //alert("Successfully Updated");
+		                    jQuery("#modal_config_ncc").modal('show');
+		                    console.log(data)
+		                },
+		            });
+		        }
+		        if ($$(this).attr('id')=="config_view") {
+		            var form_data = $$("#view").serializeArray();
+		            form_data.push({name: 'checker', value: 'view'});
+		            console.log(form_data)
+		                jQuery.ajax({
+		                url: '/config',
+		                type: "POST",
+		                dataType: "json",
+		                data: form_data,
+		                success: function(value) {
+		                    console.log(value)
+		                    //alert("Successfully Updated")
+		                    jQuery("#modal_config_view").modal('show');
+		                },
+		            });
+		        }		        
+		    return false;
+		    });
+		
+		    jQuery(".conn").click(function() {
+		        if ($$(this).attr('id')=="connect_vc") {
+		            var form_data = $$("#vc").serializeArray();
+		            form_data.push({name: 'checker', value: 'vc'});
+		
+		                jQuery.ajax({
+		                url: '/connect',
+		                type: "POST",
+		                //contentType: 'application/x-www-form-urlencoded',
+		                dataType: "json",
+		                data: form_data,
+		                success: function(data) {
+		                    console.log(data)
+		                    var status=data["Connection"];
+		                    console.log(status);
+		                    jQuery("#modal_connect_vc .connStatus").html(status);
+		                    jQuery("#modal_connect_vc").modal('show');
+		                    //alert("Connection "+status)
+		                },
+		            });
+		        }
+		        if ($$(this).attr('id')=="connect_ncc") {
+		            var form_data = $$("#ncc").serializeArray();
+		            form_data.push({name: 'checker', value: 'ncc'});
+		
+		            jQuery.ajax({
+		                url: '/connect',
+		                type: "POST",
+		                //contentType: 'application/x-www-form-urlencoded',
+		                dataType: "json",
+		                data: form_data,
+		                success: function(data) {
+		                    console.log(data)
+		                    var status=data["Connection"];
+		                    console.log(status);
+		                    jQuery("#modal_connect_ncc .connStatus").html(status);
+		                    jQuery("#modal_connect_ncc").modal('show');
+		                    //alert("Connection "+status)
+		                },
+		            });
+		        }
+		        if ($$(this).attr('id')=="connect_view") {
+		            var form_data = $$("#view").serializeArray();
+		            form_data.push({name: 'checker', value: 'view'});
+		
+		            jQuery.ajax({
+		                url: '/connect',
+		                type: "POST",
+		                //contentType: 'application/x-www-form-urlencoded',
+		                dataType: "json",
+		                data: form_data,
+		                success: function(data) {
+		                    console.log(data)
+		                    var status=data["Connection"];
+		                    console.log(status);
+		                    jQuery("#modal_connect_view .connStatus").html(status);
+		                    jQuery("#modal_connect_view").modal('show');
+		                    //alert("Connection "+status)
+		                },
+		            });
+		        }		        
+		    return false;
+		    });
+		});
+		</script>
+    
+</head>
+<body>
+    <div class="view100 page page-dashboard">
+        <div class="container-fluid no-padding top_header ng-scope">
+            <div class="row no-margin top_header_height">
+                <div class="col-sm-5 col-xs-2 no-padding top_left top_header_font">
+                    <span class="top_header_font_sizer">HEALTH CHECK</span>
+                </div>
+                <div class="col-sm-2 col-xs-2 nutanixlogo"><a target="_blank" href="http://www.nutanix.com/"><img src="/static/images/logo.png"></a></div>
+            </div>
+        </div>
+        <div class="row no-margin nx-main-container">
+        	<div class="openClosePanel">
+        		<a href="#." id="openPanel"><img src="/static/images/right_arrow.png" width="20"/> Show Configration Panel</a> 
+        		<a href="#." id="closePanel"><img src="/static/images/left_arrow.png" width="20" /> Hide Configration Panel</a>
+        	</div>
+            <div class="col-lg-3 col-md-3 col-sm-3 no-padding" id="leftPanel">
+            	<div class="col-lg-12 col-md-12 col-sm-12 leftSide_area no-margin">
+            		$ id1 = "config_"
+				    $ id2 = "connect_"
+				    $ id3 = "run_"
+				    $for checker, checkObject in checkers.iteritems():
+				    <h2 class="formHeading"><span>$:checker</span> configration detail</h2>
+				    <div class="col-lg-12 col-md-12 col-sm-12 no-margin  connectionForms">
+					    $if checkObject.config_form:
+					    	<form id=$checker method="post">
+					    		<div class="col-lg-12 col-md-12 col-sm-12 no-margin no-padding formTbl">
+					    			$:checkObject.config_form.render()
+					    		</div>
+					    		<div class="col-lg-12 col-md-12 col-sm-12 no-margin no-padding formButtonsSec">
+					    			<input type="button" data-toggle="modal" data-target=#modal_$:id1$:checker id=$:id1$:checker class="conf btn btn-primary healthCheckBtn" value="Configure" /> 
+					                <input type="button" data-toggle="modal" data-target=#modal_$:id2$:checker id=$:id2$:checker class="conn btn btn-primary healthCheckBtn" value="Verify Connection"  />
+					    		</div>
+					    		<div class="modal fade" id="modal_$:id1$:checker" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								  <div class="modal-dialog">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+								        <h4 class="modal-title" id="myModalLabel">Configuration Status</h4>
+								      </div>
+								      <div class="modal-body">
+								        	Successfully Updated
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-primary healthCheckBtn" data-dismiss="modal">Close</button>
+								      </div>
+								    </div>
+								  </div>
+								</div>
+								<div class="modal fade" id="modal_$:id2$:checker" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								  <div class="modal-dialog">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+								        <h4 class="modal-title" id="myModalLabel">Connection Status</h4>
+								      </div>
+								      <div class="modal-body">
+								       <!--  Successfully Updated -->
+								        <div class="connStatus"></div>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-primary healthCheckBtn" data-dismiss="modal">Close</button>
+								      </div>
+								    </div>
+								  </div>
+								</div>
+					    	</form>
+					    $else:
+					    	<div>Kindly host website on windows machine to run VMware Horizon View Health Check.</div>
+					    </div>
+            	</div>
+				
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9" id="mainContent">
+	            <div class="col-lg-12 col-md-12 col-sm-12 categorySec">
+	            <div class="centerAlign">
+	            	Checker :
+		            <select id="category_select"> 
+		            	<option value="">Select Checker</option>
+		            	$for checker, checkObject in checkers.iteritems():
+		            		$if checkObject.config_form:
+		            			<option value=$checker >$:checker</option>
+		            </select>
+		            Check Group:
+		            <select id="group_select" disabled> 
+		            	<option value="">Select Check Group</option>
+		            	
+		            </select>
+		            
+		            <input type="button" data-toggle="modal" data-target="#modal_runchecks" id="runchecks" value="Run" disabled class="btn btn-primary healthCheckBtn runBtn"/>
+                    
+                    <input type="button" id="stoprunchecks" value="Stop" style="visibility:hidden;" class="btn btn-primary stopBtn runBtn"/>
+                    <span class="loader"><img src="/static/images/loading.gif" /></span>
+
+                    
+                    </div>
+                    <div class="modal fade" id="modal_runchecks" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					        <h4 class="modal-title" id="myModalLabel">Execution Status</h4>
+					      </div>
+					      <div class="modal-body">
+					        <div class="runckeckStatus"></div>
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-primary healthCheckBtn" data-dismiss="modal">Close</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+	            </div>
+	            <div class="col-lg-12 col-md-12 col-sm-12 no-padding logArea">
+	            	<!--<textarea id="logs" class="col-lg-12 col-md-12 col-sm-12 logcontainer"></textarea>-->
+	            	<div id="logs" class="col-lg-12 col-md-12 col-sm-12 logcontainer">
+	            		<!--<h4></h4>
+	            		<div class="logsHeading col-lg-12 col-md-12 col-sm-12">
+	            			<div class="col-lg-9 col-md-9 col-sm-9">Check</div>
+	            			<div class="col-lg-1 col-md-1 col-sm-1">Expected</div>
+	            			<div class="col-lg-1 col-md-1 col-sm-1">Actual</div>
+	            			<div class="col-lg-1 col-md-1 col-sm-1">Status</div>
+	            		</div>
+	            		<div class="logsdata col-lg-12 col-md-12 col-sm-12">-->
+	            		</div>
+	            	</div>
+	            </div>
+		    
+            </div>
+            
+        </div>
+    </div>  
+</body>
+</html>
+

@@ -1,0 +1,234 @@
+@font-face {
+  font-family: 'ProximaNovaSoftRegular';
+  font-weight: 500;
+  src: url('../fonts/ProximaNovaSoft-Regular-webfont.eot');
+  src: url('../fonts/ProximaNovaSoft-Regular-webfont.eot?iefix') format('eot'), url('../fonts/ProximaNovaSoft-Regular-webfont.woff') format('woff'), url('../fonts/ProximaNovaSoft-Regular-webfont.ttf') format('truetype'), url('../fonts/ProximaNovaSoft-Regular-webfont.svg#webfont') format('svg');
+}
+@font-face {
+  font-family: 'ProximaNovaSoftSemiBold';
+  font-weight: 600;
+  src: url('../fonts/ProximaNovaSoft-Semibold-webfont.eot');
+  src: url('../fonts/ProximaNovaSoft-Semibold-webfont.eot?iefix') format('eot'), url('../fonts/ProximaNovaSoft-Semibold-webfont.woff') format('woff'), url('../fonts/ProximaNovaSoft-Semibold-webfont.ttf') format('truetype'), url('../fonts/ProximaNovaSoft-Semibold-webfont.svg#webfont') format('svg');
+}
+@font-face {
+  font-family: 'ProximaNovaSoftBold';
+  font-weight: 700;
+  src: url('../fonts/ProximaNovaSoft-Bold-webfont.eot');
+  src: url('../fonts/ProximaNovaSoft-Bold-webfont.eot?iefix') format('eot'), url('../fonts/ProximaNovaSoft-Bold-webfont.woff') format('woff'), url('../fonts/ProximaNovaSoft-Bold-webfont.ttf') format('truetype'), url('../fonts/ProximaNovaSoft-Bold-webfont.svg#webfont') format('svg');
+}
+@font-face {
+  font-family: 'ss-nutanix';
+  src: url('../fonts/ss-nutanix-regular-webfont.eot');
+  src: url('../fonts/ss-nutanix-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/ss-nutanix-regular-webfont.woff') format('woff'), url('../fonts/ss-nutanix-regular-webfont.ttf') format('truetype'), url('../fonts/ss-nutanix-regular-webfont.svg#ss-miniregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+[data-icon]:before {
+  content: Nattr(data-icon);
+  speak: none;
+  font-family: ss-nutanix;
+  font-weight: normal;
+  font-style: normal;
+  color:#ccc;
+}
+
+
+a{
+	color:#767676;
+}
+
+
+html {
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    height: 100%;
+}
+
+.view100 {
+    height: 100%;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    color: #424950;
+    font-size: 12px;
+    font-family: ProximaNovaSoftSemiBold;
+	 -webkit-transition: background-color 0ms ease 300ms;
+    -moz-transition: background-color 0ms ease 300ms;
+    -ms-transition: background-color 0ms ease 300ms;
+    -o-transition: background-color 0ms ease 300ms;
+    transition: background-color 0ms ease 300ms;
+}
+
+
+.n-preloader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+.n-preloader .n-loading {
+    position: relative;
+    left: -50%;
+    margin-top: -150px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #424950;
+    background: transparent url("../images/n-loading.gif") no-repeat center center;
+    width: 400px;
+    height: 300px;
+}
+
+
+ul, .list-unstyled {
+    padding-left: 30px;
+}
+ul li {
+    /*list-style:none;*/
+}
+
+a,a:hover,a:focus {
+    text-decoration:none;
+    outline:none;
+}
+::selection {
+    background:#1FB5AD;
+    color:#fff;
+}
+::-moz-selection {
+    background:#1FB5AD;
+    color:#fff;
+}
+
+body {
+    color: #424950;
+    font-size: 12px;
+    text-rendering: optimizelegibility;
+    transition: background-color 0ms ease 300ms;
+}
+.view100 {
+    height: 100%;
+}
+.page {
+    bottom: 0;
+    padding-top: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.no-padding {
+    padding: 0;
+}
+.no-margin {
+    margin: 0;
+}
+.top_header_height {
+    height: 60px;
+}
+.top_header_font {
+    color: #fff;
+    font-family: ProximaNovaSoftBold;
+    font-size: 14px;
+    line-height: 2;
+}
+.top_header_font .top_header_font_sizer {
+    font-size: 21px;
+}
+.top_header_font .top_header_font_beta {
+    color: rgb(190, 177, 177);
+    font-size: 12px;
+    line-height: 1;
+    margin-left: 5px;
+}
+.top_left {
+    padding: 0.5% 0 0 2%;
+}
+.nutanixlogo {
+    padding-top: 18px;
+    text-align: center;
+}
+.top_header {
+    background: none repeat scroll 0 0 #343537;
+    height: 60px;
+}
+.nx-main-container {
+    position: relative;
+    top: -2px;
+}
+
+.leftSide_area{ padding: 2%;}
+.leftSide_area h2{ font-size:14px;color: #6f787e;
+    font-family: ProximaNovaSoftSemiBold; margin: 0; width:100%; float:left;}
+ .healthCheckBtn{background-color: #26bcf1;
+    border: 1px solid #26bcf1;
+    color: #fff;
+    font-family: ProximaNovaSoftSemiBold;
+    font-size: 11px; padding: 3px 8px;}
+.stopBtn {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;font-family: ProximaNovaSoftSemiBold;
+    font-size: 11px; padding: 3px 8px;
+}
+.formButtonsSec{ text-align: right; margin-right:10px; padding: 0;}
+.formTbl table{ width: 100%; font-size: 12px;font-family: 'ProximaNovaSoftRegular'; }
+.connectionForms{ border-bottom: 1px solid #ccc; padding: 5px 0 15px; margin-bottom:10px;}
+input[type="text"], input[type="password"], select {background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #343536;
+    display: block;
+    font-size: 11px;
+    height: 25px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%; margin-bottom: 5px;}
+    
+.logcontainer{  height:480px; border: 1px solid #ccc; overflow-y:scroll;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    color: #343536; padding:8px 10px;
+    display: block;font-size: 11px;}
+.categorySec{ padding: 5px; color:#6f787e; font-size:12px; margin-top:-8px;}
+.categorySec select{ width:150px; display:inline-block; margin-right: 15px; margin-top: 10px;}
+.runBtn{ margin-top:-4px;}
+
+#logs h4{padding:5px; margin:0; font-size:14px; width:100%; float:left;}
+#logs h4 a{ margin-left: 10px;color: #42b663 !important}
+.logsHeading,.logsdata{ margin:0;padding:0;}
+.logsHeading div{ font-size:14px; font-weight:bold; padding:5px; color:#fff; background:#26bcf1; margin:0;}
+.logsmainData div{ padding:5px; font-size:12px; border:1px solid #ccc;margin:0;color:#6f787e;}
+.logsmainData{ width: 100%; float:left}
+.formHeading{ text-transform: capitalize; padding:10px 0 5px 0}
+.formHeading span{ text-transform: uppercase;}
+
+.fail{
+    color:#fb6f6b !important;
+}
+.success{
+    color:#42b663 !important;
+}
+.warn{
+    color:#800080 !important;
+}
+.err{
+    color:#ffff00 !important;
+}
+.loader{ display:none; margin-left: 10px;}
+.modal-dialog{ width:300px;}
+.modal-header, .modal-footer{ padding:10px 15px;}
+.modal-header h4{ font-size:14px;}
+.modal-header .close{ margin-top:3px;}
+.openClosePanel{ float: left;width:100%; margin-top:15px;}
+.openClosePanel a{ padding:5px 5px; border:1px solid #ccc; border-radius: 0 4px 4px 0; position:relative; z-index:1;}
+.centerAlign{ width: 550px; margin:0 auto}
